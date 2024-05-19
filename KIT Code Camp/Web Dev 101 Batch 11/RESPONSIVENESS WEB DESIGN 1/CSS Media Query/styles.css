@@ -13,3 +13,11 @@ Showing Blue
     }
 }
 
+/* Mobile Phone:If the Screen width is not Greater 425px,
+Showing Black */
+
+@media screen and (max-width:500px) {
+    body {
+        background-color: black;
+    }
+}
