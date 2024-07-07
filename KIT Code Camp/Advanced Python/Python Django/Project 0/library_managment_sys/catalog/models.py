@@ -74,7 +74,7 @@ class Book(models.Model):
         'Language', on_delete=models.SET_NULL, null=True)
 
     class Meta:
-        ordering = ['title', 'author']
+        ordering = ['-id','title', 'author']
 
     def display_genre(self):
         """Creates a string for the Genre. This is required to display genre in Admin."""
@@ -104,14 +104,17 @@ class BookInstance(models.Model):
     book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
+    
+    #Add datafield "borrower" to to Know which User Borrow the Book
     borrower = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     @property
     def is_overdue(self):
-        """Determines if the book is overdue based on due date and current date."""
+        """Check if the book is overdue based on due date and current date."""
         return bool(self.due_back and date.today() > self.due_back)
-
+       
+    
     LOAN_STATUS = (
         ('d', 'Maintenance'),
         ('o', 'On loan'),
@@ -128,7 +131,7 @@ class BookInstance(models.Model):
 
     class Meta:
         ordering = ['due_back']
-        permissions = (("can_mark_returned", "Set book as returned"),)
+        permissions = (('can_marked_return', 'Set Book Renew Due-Date'),)
 
     def get_absolute_url(self):
         """Returns the url to access a particular book instance."""
@@ -140,19 +143,19 @@ class BookInstance(models.Model):
 
 
 class Author(models.Model):
-    """Model representing an author."""
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    date_of_birth = models.DateField(null=True, blank=True)
-    date_of_death = models.DateField('died', null=True, blank=True)
+        """Model representing an author."""
+        first_name = models.CharField(max_length=100)
+        last_name = models.CharField(max_length=100)
+        date_of_birth = models.DateField(null=True, blank=True)
+        date_of_death = models.DateField('Date of Death', null=True, blank=True)
 
-    class Meta:
-        ordering = ['last_name', 'first_name']
+        class Meta:
+            ordering = ['first_name', 'last_name']
 
-    def get_absolute_url(self):
-        """Returns the url to access a particular author instance."""
-        return reverse('author-detail', args=[str(self.id)])
+        def get_absolute_url(self):
+            """Returns the url to access a particular author instance."""
+            return reverse('author-detail', args=[str(self.id)])
 
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.last_name}, {self.first_name}'
+        def __str__(self):
+            """String for representing the Model object."""
+            return f'{self.first_name} {self.last_name}'

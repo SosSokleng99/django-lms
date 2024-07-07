@@ -1,0 +1,34 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Author Detail</h1>
+    <p>This detail page of Author: <strong> {{ author }} </strong></p>
+
+
+    {% for book in author.book_set.all %}
+        <dt><a href="{{ book.get_absolute_url }}">{{ book.title }}</a> <br></dt> 
+        <dd><p>{{ book.summary }}</p></dd>
+
+        {% empty %}
+        <p>This author has no books.</p> 
+    {% endfor %}
+{% endblock %}
+
+{% block sidebar %}
+{{ block.super }}
+
+
+ <ul class="sidebar-nav">
+    <hr>
+    {% if perms.can_marked_return and perms.catalog.change_auhtor %}
+    <li><a href="{% url 'author-update' author.id %}">Update Author</a></li>
+    {% endif %}
+    {% if not author.book_set.all and perms.catalog.delete_author %}
+    <li><a href="{% url 'author-delete' author.id %}">Delete Author</a></li>
+    {% endif %}
+
+    
+ </ul>
+{% endblock %}
+
+
