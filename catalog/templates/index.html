@@ -1,0 +1,28 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Welcome to Library Management System</h1>
+
+<br>
+<h4>The library has the following record counts:</h4>
+
+<ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Total Number of Books
+      <span class="badge bg-primary rounded-pill">{{ num_books }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Total Number of Books Copies
+      <span class="badge bg-primary rounded-pill">{{ num_instances }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      Available Books
+      <span class="badge bg-primary rounded-pill"> {{ num_instances_available }}</span>
+    </li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        Authors
+        <span class="badge bg-primary rounded-pill"> {{ num_authors }}</span>
+      </li>
+  </ul>
+
+{% endblock %}
